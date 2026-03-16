@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hilti Prep — Tarn (81)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--r:#D22130;--rd:#A8182B;--rl:#FFF1F2;--rm:#FEE2E4;--bg:#FFFFFF;--bg2:#F7F7F5;--txt:#1A1A1A;--txt2:#6B6B6B;--brd:#E5E5E3;--brd2:#D0D0CC}
+@media(prefers-color-scheme:dark){:root{--bg:#1C1C1C;--bg2:#252525;--txt:#F0F0EE;--txt2:#9A9A97;--brd:#333330;--brd2:#444440}}
+body{font-family:'IBM Plex Sans',system-ui,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+.app{max-width:900px;margin:0 auto;padding:2rem 1.25rem 4rem}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid var(--r)}
+.h-badge{background:var(--r);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;padding:6px 13px;border-radius:3px;letter-spacing:.06em;flex-shrink:0}
+.topbar h1{font-size:17px;font-weight:600;color:var(--txt);letter-spacing:-.01em}
+.topbar p{font-size:11px;color:var(--txt2);margin-top:2px}
+.tarn{margin-left:auto;background:var(--r);color:#fff;font-size:10px;font-weight:600;padding:4px 12px;border-radius:3px;letter-spacing:.05em;text-transform:uppercase;flex-shrink:0}
+
+/* BLOCKS */
+.blk{margin-bottom:1.75rem}
+.blk-lbl{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--r);margin-bottom:.7rem;display:flex;align-items:center;gap:8px}
+.blk-lbl::after{content:'';flex:1;height:.5px;background:var(--rm)}
+
+/* INPUTS */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:560px){.row2{grid-template-columns:1fr}}
+.iw label{font-size:11px;color:var(--txt2);margin-bottom:4px;display:block;font-weight:500}
+input.f{width:100%;padding:9px 12px;border:.5px solid var(--brd2);border-radius:6px;font-size:13px;font-family:inherit;color:var(--txt);background:var(--bg);outline:none;transition:border .12s}
+input.f:focus{border-color:var(--r);box-shadow:0 0 0 2px rgba(210,33,48,.12)}
+
+/* TYPE CARDS */
+.type-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media(max-width:700px){.type-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:420px){.type-grid{grid-template-columns:repeat(2,1fr)}}
+.tcard{border:.5px solid var(--brd2);border-radius:8px;padding:11px 8px;cursor:pointer;text-align:center;background:var(--bg);transition:all .12s;user-select:none}
+.tcard:hover{border-color:var(--r)}
+.tcard.on{border:1.5px solid var(--r);background:var(--rl)}
+.tcard-ico{font-size:22px;line-height:1;margin-bottom:5px}
+.tcard-nm{font-size:11px;font-weight:600;color:var(--txt);line-height:1.3}
+.tcard-sub{font-size:10px;color:var(--txt2);margin-top:2px;line-height:1.3}
+.tcard.on .tcard-nm{color:var(--r)}
+
+/* SIZE */
+.size-info{background:var(--bg2);border-radius:7px;padding:10px 14px;font-size:12px;color:var(--txt2);border-left:2.5px solid var(--r);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.size-info strong{color:var(--txt);font-weight:600}
+.size-chips{display:flex;gap:6px;margin-left:auto}
+
+/* GAMMES */
+.gamme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(max-width:560px){.gamme-grid{grid-template-columns:1fr}}
+.gcard{border:.5px solid var(--brd2);border-radius:8px;padding:13px 13px;cursor:pointer;background:var(--bg);transition:all .12s;user-select:none}
+.gcard:hover{border-color:var(--r)}
+.gcard.on{border:1.5px solid var(--r);background:var(--rl)}
+.gcard-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.gcard-ico{font-size:18px}
+.gcard-nm{font-size:13px;font-weight:600;color:var(--txt)}
+.gcard.on .gcard-nm{color:var(--r)}
+.gcard-refs{display:flex;flex-wrap:wrap;gap:4px}
+.ref-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 7px;border-radius:3px;background:var(--bg2);color:var(--txt2);border:.5px solid var(--brd)}
+.gcard.on .ref-tag{background:var(--rm);color:var(--rd);border-color:var(--rm)}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:.5px solid var(--brd2);border-radius:4px;padding:7px 13px;cursor:pointer;font-size:12px;font-weight:500;color:var(--txt2);background:var(--bg);transition:all .12s;user-select:none;font-family:inherit}
+.chip:hover{border-color:var(--r);color:var(--r)}
+.chip.on{background:var(--r);color:#fff;border-color:var(--r)}
+
+/* BUTTON */
+.gen-btn{width:100%;padding:14px;background:var(--r);color:#fff;border:none;border-radius:7px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:9px;letter-spacing:.01em;margin-top:.5rem}
+.gen-btn:hover{background:var(--rd)}
+.gen-btn:disabled{background:#bbb;cursor:not-allowed}
+
+/* RESULT */
+.result{margin-top:2rem;border:.5px solid var(--brd);border-radius:10px;overflow:hidden}
+.r-head{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;background:var(--r);gap:10px}
+.r-htitle{font-size:14px;font-weight:600;color:#fff}
+.r-hsub{font-size:11px;color:rgba(255,255,255,.75);margin-top:2px}
+.copy-btn{font-size:11px;font-weight:500;padding:6px 13px;border:.5px solid rgba(255,255,255,.4);border-radius:4px;background:rgba(255,255,255,.15);color:#fff;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0}
+.copy-btn:hover{background:rgba(255,255,255,.25)}
+.r-body{padding:1.25rem}
+
+.rs{margin-bottom:1.25rem}
+.rs-title{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--r);margin-bottom:.7rem;display:flex;align-items:center;gap:6px}
+.rs-title::after{content:'';flex:1;height:.5px;background:var(--rm)}
+
+.accroche{background:var(--rl);border-left:3px solid var(--r);border-radius:0 6px 6px 0;padding:13px 15px;font-size:14px;line-height:1.7;color:var(--txt)}
+.ctx{font-size:13px;color:var(--txt2);line-height:1.7}
+
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:8px}
+.mcard{border-radius:7px;padding:11px 13px;background:var(--bg2)}
+.mcard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:4px;margin-bottom:5px}
+.mcard-nm{font-size:13px;font-weight:600;color:var(--txt);line-height:1.3}
+.mcard-ref{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px;white-space:nowrap;flex-shrink:0}
+.mcard-arg{font-size:11px;color:var(--txt2);line-height:1.5}
+
+.qlist{list-style:none}
+.qi{display:flex;gap:10px;padding:9px 0;border-bottom:.5px solid var(--brd);align-items:flex-start}
+.qi:last-child{border-bottom:none}
+.qn{background:var(--r);color:#fff;font-size:10px;font-weight:600;width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-family:'IBM Plex Mono',monospace}
+.qt{font-size:13px;color:var(--txt);line-height:1.55}
+
+.alist{display:flex;flex-direction:column;gap:6px}
+.ai{display:flex;gap:10px;align-items:flex-start;background:var(--bg2);border-radius:6px;padding:10px 12px}
+.adot{width:5px;height:5px;background:var(--r);border-radius:50%;flex-shrink:0;margin-top:7px}
+.at{font-size:13px;color:var(--txt);line-height:1.55}
+
+.oitem{margin-bottom:12px}
+.oq{font-size:13px;font-weight:600;color:var(--txt);margin-bottom:5px}
+.or{font-size:13px;color:var(--txt2);line-height:1.6;border-left:2px solid var(--r);padding-left:11px}
+
+.nextbox{background:var(--bg2);border-radius:7px;padding:13px 15px;font-size:13px;color:var(--txt);line-height:1.7}
+
+hr.div{border:none;border-top:.5px solid var(--brd);margin:1rem 0}
+
+.ld{display:flex;gap:8px;justify-content:center;padding:3rem}
+.ld span{width:9px;height:9px;border-radius:50%;background:var(--r);animation:ld .9s infinite}
+.ld span:nth-child(2){animation-delay:.15s}
+.ld span:nth-child(3){animation-delay:.3s}
+@keyframes ld{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+.err{color:var(--r);font-size:13px;padding:12px 15px;background:var(--rl);border-radius:7px;border:.5px solid var(--rm);margin-top:1rem}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="h-badge">HILTI</div>
+    <div>
+      <h1>Préparation d'entretien commercial</h1>
+      <p>Responsable Grand Compte — Secteur Tarn (81)</p>
+    </div>
+    <div class="tarn">Tarn · 81</div>
+  </div>
+
+  <!-- CLIENT -->
+  <div class="blk">
+    <div class="blk-lbl">Informations client</div>
+    <div class="row2">
+      <div class="iw"><label>Entreprise</label><input class="f" id="company" placeholder="ex : SARL Martin Construction"/></div>
+      <div class="iw"><label>Contact</label><input class="f" id="contact" placeholder="ex : M. Martin, Gérant"/></div>
+      <div class="iw"><label>CA estimé (€)</label><input class="f" id="ca" placeholder="ex : 120 000 €"/></div>
+      <div class="iw"><label>Contexte / historique</label><input class="f" id="ctx" placeholder="ex : Dernier achat TE 30, 2 ans"/></div>
+    </div>
+  </div>
+
+  <!-- TYPE ACTIVITE -->
+  <div class="blk">
+    <div class="blk-lbl">Type d'activité</div>
+    <div class="type-grid" id="types">
+      <div class="tcard" data-val="Construction neuf (gros œuvre, fondations, dallage)"><div class="tcard-ico">🏗️</div><div class="tcard-nm">Construction neuf</div><div class="tcard-sub">Gros œuvre, fondations</div></div>
+      <div class="tcard" data-val="Rénovation / réhabilitation (second œuvre, démolition partielle)"><div class="tcard-ico">🔨</div><div class="tcard-nm">Rénovation</div><div class="tcard-sub">Réhab, second œuvre</div></div>
+      <div class="tcard" data-val="Piscine / génie civil eau (béton armé, maçonnerie spécialisée)"><div class="tcard-ico">🏊</div><div class="tcard-nm">Piscine</div><div class="tcard-sub">Béton armé, génie civil eau</div></div>
+      <div class="tcard" data-val="Voirie / VRD (routes, réseaux, terrassement)"><div class="tcard-ico">🛣️</div><div class="tcard-nm">Voirie / VRD</div><div class="tcard-sub">Routes, réseaux</div></div>
+      <div class="tcard" data-val="Charpente métallique / structure acier"><div class="tcard-ico">🔩</div><div class="tcard-nm">Charpente métal</div><div class="tcard-sub">Structure acier</div></div>
+      <div class="tcard" data-val="Maçonnerie traditionnelle (parpaing, brique, pierre)"><div class="tcard-ico">🧱</div><div class="tcard-nm">Maçonnerie</div><div class="tcard-sub">Parpaing, brique, pierre</div></div>
+      <div class="tcard" data-val="Extension / surélévation de bâtiment"><div class="tcard-ico">🏠</div><div class="tcard-nm">Extension</div><div class="tcard-sub">Surélévation, agrandissement</div></div>
+      <div class="tcard" data-val="Terrassement / démolition lourde"><div class="tcard-ico">🚜</div><div class="tcard-nm">Terrassement</div><div class="tcard-sub">Démolition lourde</div></div>
+      <div class="tcard" data-val="Aménagement extérieur (terrasse, clôture, allée béton)"><div class="tcard-ico">🌿</div><div class="tcard-nm">Aménagement ext.</div><div class="tcard-sub">Terrasse, clôture</div></div>
+      <div class="tcard" data-val="Travaux publics / infrastructure (ponts, tunnels, canalisations)"><div class="tcard-ico">🏛️</div><div class="tcard-nm">Travaux publics</div><div class="tcard-sub">Ponts, tunnels</div></div>
+    </div>
+  </div>
+
+  <!-- TAILLE -->
+  <div class="blk">
+    <div class="blk-lbl">Taille de l'entreprise</div>
+    <div class="size-info">
+      <span style="font-size:16px">👥</span>
+      <span>Cible : <strong>5 à 50 salariés</strong> — TPE et PME BTP du Tarn</span>
+      <div class="size-chips" id="size-chips">
+        <div class="chip on" data-val="TPE (5-9 salariés)" onclick="this.classList.toggle('on')">5–9</div>
+        <div class="chip on" data-val="PME (10-25 salariés)" onclick="this.classList.toggle('on')">10–25</div>
+        <div class="chip on" data-val="PME (26-50 salariés)" onclick="this.classList.toggle('on')">26–50</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAMMES -->
+  <div class="blk">
+    <div class="blk-lbl">Gammes Hilti à cibler</div>
+    <div class="gamme-grid" id="gammes">
+      <div class="gcard on" data-val="Perforateurs & marteaux SDS">
+        <div class="gcard-head"><span class="gcard-ico">🔨</span><span class="gcard-nm">Perforateurs & marteaux</span></div>
+        <div class="gcard-refs"><span class="ref-tag">TE 2-22 Nuron</span><span class="ref-tag">TE 6-22</span><span class="ref-tag">TE 30-22</span><span class="ref-tag">TE 60-22</span><span class="ref-tag">TE 2-S</span><span class="ref-tag">TE 3000-AVR</span></div>
+      </div>
+      <div class="gcard on" data-val="Visseuses & perceuses Nuron">
+        <div class="gcard-head"><span class="gcard-ico">🔩</span><span class="gcard-nm">Visseuses & perceuses</span></div>
+        <div class="gcard-refs"><span class="ref-tag">SF 4-22</span><span class="ref-tag">SF 6H-22</span><span class="ref-tag">SFC 22-A</span><span class="ref-tag">SIW 6-22</span><span class="ref-tag">SIW 8-22</span><span class="ref-tag">ST 18W-22</span></div>
+      </div>
+      <div class="gcard on" data-val="Découpe & meulage">
+        <div class="gcard-head"><span class="gcard-ico">⚙️</span><span class="gcard-nm">Découpe & meulage</span></div>
+        <div class="gcard-refs"><span class="ref-tag">AG 125-A22</span><span class="ref-tag">AG 6D-22</span><span class="ref-tag">AG 230-27DB</span><span class="ref-tag">DSH 600-22</span><span class="ref-tag">SCM 22-A</span><span class="ref-tag">DCH 300</span></div>
+      </div>
+      <div class="gcard on" data-val="Mesure & détection laser">
+        <div class="gcard-head"><span class="gcard-ico">📐</span><span class="gcard-nm">Mesure & détection</span></div>
+        <div class="gcard-refs"><span class="ref-tag">PD-E</span><span class="ref-tag">PM 2-LG</span><span class="ref-tag">PM 50 MG-22</span><span class="ref-tag">PR 4-22</span><span class="ref-tag">PR 40-22</span><span class="ref-tag">PS 300</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OBJECTIF -->
+  <div class="blk">
+    <div class="blk-lbl">Objectif de la visite</div>
+    <div class="chips" id="goals">
+      <div class="chip" data-val="Renouvellement parc machines">Renouvellement parc</div>
+      <div class="chip" data-val="Upsell Nuron / passage sans fil">Upsell Nuron sans fil</div>
+      <div class="chip" data-val="Conquête nouveau client BTP">Nouveau client</div>
+      <div class="chip" data-val="Proposition Fleet Management">Proposer Fleet Management</div>
+      <div class="chip" data-val="Réponse appel d'offres chantier">Appel d'offres</div>
+      <div class="chip" data-val="Démo produit sur site / chantier">Démo sur chantier</div>
+      <div class="chip" data-val="Fidélisation et cross-sell gammes">Fidélisation / cross-sell</div>
+    </div>
+  </div>
+
+  <!-- CHANTIER -->
+  <div class="blk">
+    <div class="blk-lbl">Contexte chantier (optionnel)</div>
+    <div class="chips" id="chantier">
+      <div class="chip" data-val="Béton armé haute densité">Béton armé</div>
+      <div class="chip" data-val="Maçonnerie parpaing / brique">Maçonnerie</div>
+      <div class="chip" data-val="Ferraillage / acier">Ferraillage</div>
+      <div class="chip" data-val="Travaux en hauteur / échafaudage">Travaux en hauteur</div>
+      <div class="chip" data-val="Forage profond fondations">Fondations profondes</div>
+      <div class="chip" data-val="Carottage béton">Carottage</div>
+      <div class="chip" data-val="Implantation / nivellement laser">Implantation laser</div>
+      <div class="chip" data-val="Détection réseaux avant perçage">Détection réseaux</div>
+    </div>
+  </div>
+
+  <button class="gen-btn" id="genBtn" onclick="generate()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    Générer ma préparation d'entretien
+  </button>
+
+  <div id="result"></div>
+</div>
+
+<script>
+// --- INTERACTIONS UI ---
+document.querySelectorAll('#types .tcard').forEach(c => c.addEventListener('click', () => {
+  document.querySelectorAll('#types .tcard').forEach(x => x.classList.remove('on'));
+  c.classList.add('on');
+}));
+document.querySelectorAll('#gammes .gcard').forEach(c => c.addEventListener('click', () => c.classList.toggle('on')));
+['#goals','#chantier'].forEach(s => document.querySelectorAll(s + ' .chip').forEach(c => c.addEventListener('click', () => c.classList.toggle('on'))));
+
+function sel(s){ return [...document.querySelectorAll(s + ' .on')].map(c => c.dataset.val).join(', '); }
+
+const GCOL = {
+  'Perforateurs & marteaux SDS':   { c:'#D22130', bg:'#FEE2E4' },
+  'Visseuses & perceuses Nuron':    { c:'#1D6FA4', bg:'#DBEAFE' },
+  'Découpe & meulage':              { c:'#B45309', bg:'#FEF3C7' },
+  'Mesure & détection laser':       { c:'#166534', bg:'#DCFCE7' }
+};
+
+// --- GENERATION ---
+async function generate() {
+  const btn = document.getElementById('genBtn');
+  const res = document.getElementById('result');
+  const company = document.getElementById('company').value || 'Client BTP';
+  const contact = document.getElementById('contact').value || '';
+  const ca      = document.getElementById('ca').value || '';
+  const ctx     = document.getElementById('ctx').value || '';
+  const typeAct = sel('#types');
+  const sizes   = [...document.querySelectorAll('#size-chips .on')].map(c => c.dataset.val).join(', ');
+  const gammes  = sel('#gammes');
+  const goals   = sel('#goals');
+  const chantier= sel('#chantier');
+
+  if (!typeAct) { res.innerHTML = '<div class="err">Sélectionne au moins un type d\'activité.</div>'; return; }
+  if (!gammes)  { res.innerHTML = '<div class="err">Sélectionne au moins une gamme à cibler.</div>'; return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Génération en cours…';
+  res.innerHTML = '<div class="ld"><span></span><span></span><span></span></div>';
+
+  const prompt = `Tu es expert commercial senior Hilti France, spécialiste BTP/Gros œuvre Tarn (81).
+Génère une préparation d'entretien ultra-opérationnelle pour un Responsable Grand Compte.
+
+CLIENT :
+- Entreprise : ${company}
+- Contact : ${contact || 'non renseigné'}
+- CA estimé : ${ca || 'non renseigné'}
+- Historique : ${ctx || 'non renseigné'}
+- Taille : ${sizes || 'TPE/PME 5-50 salariés'}
+- Activité : ${typeAct}
+- Objectif visite : ${goals || 'non précisé'}
+- Contexte chantier : ${chantier || 'non précisé'}
+
+GAMMES À CIBLER : ${gammes}
+
+Références catalogue Hilti disponibles :
+- Perforateurs : TE 2-22 Nuron, TE 6-22, TE 30-22, TE 60-22, TE 2-S (filaire), TE 3000-AVR
+- Visseuses : SF 4-22, SF 6H-22, SFC 22-A, SIW 6-22, SIW 8-22, ST 18W-22
+- Découpe : AG 125-A22, AG 6D-22, AG 230-27DB, DSH 600-22, SCM 22-A, DCH 300
+- Mesure : PD-E, PM 2-LG, PM 50 MG-22, PR 4-22, PR 40-22, PS 300
+
+Réponds UNIQUEMENT en JSON valide, sans backtick, sans texte avant ou après :
+{
+  "accroche": "2 phrases d'accroche terrain percutantes adaptées à l'activité",
+  "contexte_marche": "contexte BTP Tarn 2024-2025 pertinent pour ce profil (2-3 phrases concrètes)",
+  "machines": [
+    {"nom":"Nom produit Hilti","ref":"Référence exacte","gamme":"Gamme parmi les 4","argument":"Argument lié à l'activité (15 mots max)"}
+  ],
+  "questions": ["Q1 parc actuel ?","Q2 chantiers à venir ?","Q3 problèmes terrain ?","Q4 processus décision ?","Q5 budget/Fleet ?"],
+  "arguments_cles": ["Arg productivité BTP","Arg sécurité AVR/ATC","Arg SAV Hilti Tarn 24h","Arg Fleet Management"],
+  "objections": [
+    {"objection":"Prix trop élevé","reponse":"ROI chiffré chantier"},
+    {"objection":"Matériel actuel fonctionne","reponse":"Coût caché + Nuron"},
+    {"objection":"Pas de budget","reponse":"Fleet Management mensualité"}
+  ],
+  "next_steps": "3 actions concrètes pour closer en fin de visite"
+}`;
+
+  try {
+    const r = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1200, messages: [{ role: "user", content: prompt }] })
+    });
+    const d = await r.json();
+    const txt = d.content.map(i => i.text || '').join('');
+    const p = JSON.parse(txt.replace(/```json|```/g, '').trim());
+    window._prep = p; window._company = company; window._contact = contact;
+
+    res.innerHTML = `
+<div class="result">
+  <div class="r-head">
+    <div>
+      <div class="r-htitle">Préparation — ${company}${contact ? ' · ' + contact : ''}</div>
+      <div class="r-hsub">${typeAct.split('(')[0].trim()} · ${sizes || 'TPE/PME'} · Tarn (81) · ${new Date().toLocaleDateString('fr-FR')}</div>
+    </div>
+    <button class="copy-btn" onclick="copyPrep()">Copier la préparation</button>
+  </div>
+  <div class="r-body">
+    <div class="rs">
+      <div class="rs-title">Accroche d'ouverture</div>
+      <div class="accroche">${p.accroche}</div>
+    </div>
+    <hr class="div"/>
+    <div class="rs">
+      <div class="rs-title">Contexte marché BTP — Tarn</div>
+      <div class="ctx">${p.contexte_marche}</div>
+    </div>
+    <hr class="div"/>
+    <div class="rs">
+      <div class="rs-title">Machines à proposer</div>
+      <div class="mgrid">
+        ${p.machines.map(m => {
+          const g = GCOL[m.gamme] || { c:'#D22130', bg:'#FEE2E4' };
+          return `<div class="mcard"><div class="mcard-top"><span class="mcard-nm">${m.nom}</span><span class="mcard-ref" style="background:${g.bg};color:${g.c}">${m.ref}</span></div><div class="mcard-arg">${m.argument}</div></div>`;
+        }).join('')}
+      </div>
+    </div>
+    <hr class="div"/>
+    <div class="rs">
+      <div class="rs-title">Questions à poser</div>
+      <ul class="qlist">${p.questions.map((q,i) => `<li class="qi"><span class="qn">${i+1}</span><span class="qt">${q}</span></li>`).join('')}</ul>
+    </div>
+    <hr class="div"/>
+    <div class="rs">
+      <div class="rs-title">Arguments clés</div>
+      <div class="alist">${p.arguments_cles.map(a => `<div class="ai"><span class="adot"></span><span class="at">${a}</span></div>`).join('')}</div>
+    </div>
+    <hr class="div"/>
+    <div class="rs">
+      <div class="rs-title">Traitement des objections</div>
+      ${p.objections.map(o => `<div class="oitem"><div class="oq">— « ${o.objection} »</div><div class="or">${o.reponse}</div></div>`).join('')}
+    </div>
+    <hr class="div"/>
+    <div class="rs">
+      <div class="rs-title">Prochaines étapes</div>
+      <div class="nextbox">${p.next_steps}</div>
+    </div>
+  </div>
+</div>`;
+  } catch(e) {
+    res.innerHTML = '<div class="err">Erreur de génération. Vérifiez votre connexion et réessayez.</div>';
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Régénérer la préparation';
+}
+
+function copyPrep() {
+  const p = window._prep;
+  if (!p) return;
+  const txt = `PRÉPARATION ENTRETIEN HILTI — ${window._company || 'Client'}
+${new Date().toLocaleDateString('fr-FR')}
+
+ACCROCHE
+${p.accroche}
+
+CONTEXTE MARCHÉ
+${p.contexte_marche}
+
+MACHINES À PROPOSER
+${p.machines.map(m => `• ${m.nom} (${m.ref}) — ${m.argument}`).join('\n')}
+
+QUESTIONS
+${p.questions.map((q,i) => `${i+1}. ${q}`).join('\n')}
+
+ARGUMENTS CLÉS
+${p.arguments_cles.map(a => `• ${a}`).join('\n')}
+
+OBJECTIONS
+${p.objections.map(o => `• "${o.objection}"\n  → ${o.reponse}`).join('\n')}
+
+PROCHAINES ÉTAPES
+${p.next_steps}`;
+  navigator.clipboard.writeText(txt);
+  const b = document.querySelector('.copy-btn');
+  b.textContent = '✓ Copié !';
+  setTimeout(() => b.textContent = 'Copier la préparation', 2000);
+}
+</script>
+</body>
+</html>
